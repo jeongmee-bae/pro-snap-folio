@@ -1,10 +1,8 @@
 name: Deploy Portfolio
 
-# 메인 브랜치에 push되거나 PR이 머지될 때 실행
+# 메인 브랜치에 push될 때 실행
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
     branches: [ main, master ]
 
 jobs:
@@ -15,34 +13,27 @@ jobs:
       contents: read
       pages: write
       id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
     # 코드 체크아웃
     - name: Checkout code
       uses: actions/checkout@v4
-      
-    # Node.js 환경 설정
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
         
-    # 의존성 설치
-    - name: Install dependencies
-      run: npm install
+    # GitHub Pages에 배포 (정적 파일 직접 배포)
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       
-    # 빌드 실행 (정적 파일 복사)
-    - name: Build project
-      run: npm run build
-      
-    # GitHub Pages에 배포
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        # 또는 Personal Access Token 사용시:
-        # personal_token: ${{ secrets.PERSONAL_TOKEN }}
-        publish_dir: ./dist
-        publish_branch: gh-pages
-        force_orphan: true
+        path: '.'
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'

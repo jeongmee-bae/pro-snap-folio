@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx live-server --port=3000 --open=/index.html",
     "build": "npm run copy-assets",
-    "copy-assets": "mkdir -p dist && cp -r *.html *.css *.js dist/",
+    "copy-assets": "mkdir dist 2>nul || mkdir -p dist && copy *.html dist\\ 2>nul || cp *.html dist/ && copy *.css dist\\ 2>nul || cp *.css dist/ && copy *.js dist\\ 2>nul || cp *.js dist/",
     "dev": "npm start",
     "deploy": "npm run build"
   },
