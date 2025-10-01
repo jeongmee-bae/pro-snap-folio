@@ -41,6 +41,8 @@ jobs:
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        # 또는 Personal Access Token 사용시:
+        # personal_token: ${{ secrets.PERSONAL_TOKEN }}
         publish_dir: ./dist
         publish_branch: gh-pages
         force_orphan: true
