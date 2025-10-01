@@ -11,6 +11,10 @@ jobs:
   # 빌드 및 배포 작업
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     
     steps:
     # 코드 체크아웃
@@ -39,3 +43,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
         publish_branch: gh-pages
+        force_orphan: true
